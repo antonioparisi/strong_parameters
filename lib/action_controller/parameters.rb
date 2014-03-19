@@ -57,10 +57,10 @@ module ActionController
     def require(filter)
       case filter
       when Symbol, String
-        self[filter].presence || raise(ActionController::ParameterMissing.new(filter))
+        require_presence?(filter)
       when Array
         filter.each do |k|
-          self[k].presence || raise(ActionController::ParameterMissing.new(k))
+          require_presence?(k)
         end
       end
     end
@@ -119,6 +119,10 @@ module ActionController
       end
 
     private
+
+      def require_presence?(key)
+        self[key].presence || raise(ActionController::ParameterMissing.new(key))
+      end
 
       def convert_hashes_to_parameters(key, value, assign_if_converted=true)
         converted = convert_value_to_parameters(value)
