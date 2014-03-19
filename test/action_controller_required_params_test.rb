@@ -5,6 +5,11 @@ class BooksController < ActionController::Base
     params.require(:book).require(:name)
     head :ok
   end
+
+  def update
+    params.require([:books, :authors])
+    head :ok
+  end
 end
 
 class ActionControllerRequiredParamsTest < ActionController::TestCase
@@ -15,6 +20,15 @@ class ActionControllerRequiredParamsTest < ActionController::TestCase
     assert_response :bad_request
 
     post :create, { :book => { :title => "Mjallo!" } }
+    assert_response :bad_request
+
+    put :update, { :books => 'foo', :authors => 'bar' }
+    assert_response :ok
+
+    put :update, { :books => { :bar => 'foo' }, :authors => 'bar' }
+    assert_response :ok
+
+    put :update, { :books => 'foo' }
     assert_response :bad_request
   end
 

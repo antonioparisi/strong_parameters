@@ -54,8 +54,15 @@ module ActionController
       self
     end
 
-    def require(key)
-      self[key].presence || raise(ActionController::ParameterMissing.new(key))
+    def require(filter)
+      case filter
+      when Symbol, String
+        self[filter].presence || raise(ActionController::ParameterMissing.new(filter))
+      when Array
+        filter.each do |k|
+          self[k].presence || raise(ActionController::ParameterMissing.new(k))
+        end
+      end
     end
 
     alias :required :require

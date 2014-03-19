@@ -72,6 +72,12 @@ Thanks to Nick Kallen for the permit idea!
 
 ## Require Multiple Parameters
 
+If you want to make sure only certain parameters have to be required you can do:
+
+``` ruby
+params.require([:foo, :bar])
+```
+
 If you want to make sure that multiple keys are present in a params hash, you can call the method twice:
 
 ``` ruby
